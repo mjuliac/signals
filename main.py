@@ -28,7 +28,7 @@ class Label(Event):
         super(Label, self).__init__()
         self += print_label
 
-class UserDAO(Event):
+class UserDAO:
     def __init__(self):
         super(UserDAO, self).__init__()
         self._create = Event()
