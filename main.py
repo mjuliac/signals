@@ -26,7 +26,7 @@ class Button:
 class Label(Event):
     def __init__(self):
         super(Label, self).__init__()
-        self += print_label
+        
 
 class UserDAO:
     def __init__(self):
@@ -59,6 +59,7 @@ def main():
     button.click.emit(510, 20)
     
     label = Label()
+    label += print_label
     label.emit("Hola mundo")
     label -= print_label
     label.emit("Adios mundo")
