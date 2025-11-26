@@ -29,18 +29,26 @@ class Label(Event):
         self += print_label
 
 class CreateUser(Event):
-    def __init__(self, user: User):
+    def __init__(self):
         super(CreateUser, self).__init__()
-        self.user = user
-        self.create = Event()
+        self._create = Event()
+        self._remove = Event()
         
-    def add(self):
-        self.create += print_user_created
-        self.create.emit(self.user)
+    def add(self, user: User):
+        self.user = user
+        self._create += self.create_user
+        self._create.emit()
 
-    def remove(self):
-        self.create -= print_user_created
-        self.create.emit(self.user)
+    def create_user(self):
+        print("User created:", self.user)
+
+    def remove(self, user: User):
+        self.user = user
+        self._remove += self.remove_user
+        self._remove.emit()
+
+    def remove_user(self):
+        print("User removed:", self.user)
 
 
 def main():
@@ -56,10 +64,9 @@ def main():
     label.emit("Adios mundo")
     
     user = User("John", 30, "john@example.com")
-    create_user = CreateUser(user)
-    create_user.add()
-
-    create_user.remove()
+    create_user = CreateUser()
+    create_user.add(user)
+    create_user.remove(user)
 
 
 if __name__ == "__main__":
