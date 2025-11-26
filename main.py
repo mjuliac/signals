@@ -1,6 +1,40 @@
 from events import Event
 from dataclasses import dataclass
 
+@dataclass
+class User:
+    name: str
+    age: int
+    mail: str
+    
+class Button:
+    def __init__(self):        
+        self.clicked = Event()
+
+    def click(self, x, y):
+        self.clicked.emit(x, y)
+
+class Label(Event):
+    def __init__(self):
+        self.text_changed = Event()
+
+    def set_text(self, text):
+        self.text = text
+        self.text_changed.emit(self.text)
+        
+
+class UserDAO:
+    def __init__(self):
+        self.user_created = Event()
+        self.user_removed = Event()
+        
+    def add(self, user: User):
+        self.user_created.emit(user)
+    
+    def remove(self, user: User):
+        self.user_removed.emit(user)
+
+
 def print_click(x, y):
     print("Button clicked at", x, y)
 
@@ -10,59 +44,28 @@ def print_label(text):
 def print_user_created(user):
     print("User created:", user)
 
-@dataclass
-class User:
-    name: str
-    age: int
-    mail: str
-    
-class Button:
-    def __init__(self):        
-        self.click = Event()
-
-class Label(Event):
-    def __init__(self):
-        self.text_changed = Event()
-        
-
-class UserDAO:
-    def __init__(self):
-        self._create = Event()
-        self._remove = Event()
-        
-    def add(self, user: User):
-        self.user = user
-        self._create += self.user_created
-        self._create.emit()
-
-    def user_created(self):
-        print("User created:", self.user)
-
-    def remove(self, user: User):
-        self.user = user
-        self._remove += self.user_removed
-        self._remove.emit()
-
-    def user_removed(self):
-        print("User removed:", self.user)
+def print_user_removed(user):
+    print("User removed:", user)
 
 
 def main():
     button = Button()
-    button.click += print_click
-    button.click.emit(50, 20)
-    button.click -= print_click
-    button.click.emit(510, 20)
+    button.clicked += print_click
+    button.click(50, 20)
+    button.clicked -= print_click
+    button.click(510, 20)
     
     label = Label()
     label.text_changed += print_label
-    label.text_changed.emit("Hola mundo")
-    label.text_changed.emit("Adios mundo")
+    label.set_text("Hola mundo")
+    label.set_text("Adios mundo")
     label.text_changed -= print_label
-    label.text_changed.emit("No se imprimira")
+    label.set_text("No se imprimira")
     
     user = User("John", 30, "john@example.com")
     user_dao = UserDAO()
+    user_dao.user_created += print_user_created
+    user_dao.user_removed += print_user_removed
     user_dao.add(user)
     user_dao.remove(user)
 
