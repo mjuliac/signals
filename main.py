@@ -18,10 +18,8 @@ class User:
     
 class Button:
     def __init__(self):
-        # super(Button, self).__init__()
         # Add the global click function as a handler
         self.click = Event()
-        self.click += print_click
 
 class Label(Event):
     def __init__(self):
@@ -53,6 +51,7 @@ class UserDAO:
 
 def main():
     button = Button()
+    button.click += print_click
     button.click.emit(50, 20)
     # Remove the global click function handler
     button.click -= print_click
