@@ -32,18 +32,18 @@ class UserDAO:
         
     def add(self, user: User):
         self.user = user
-        self._create += self.create_user
+        self._create += self.user_created
         self._create.emit()
 
-    def create_user(self):
+    def user_created(self):
         print("User created:", self.user)
 
     def remove(self, user: User):
         self.user = user
-        self._remove += self.remove_user
+        self._remove += self.user_removed
         self._remove.emit()
 
-    def remove_user(self):
+    def user_removed(self):
         print("User removed:", self.user)
 
 
