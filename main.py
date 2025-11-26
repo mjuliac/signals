@@ -17,18 +17,16 @@ class User:
     mail: str
     
 class Button:
-    def __init__(self):
-        # Add the global click function as a handler
+    def __init__(self):        
         self.click = Event()
 
 class Label(Event):
     def __init__(self):
-        super(Label, self).__init__()
+        self.text_changed = Event()
         
 
 class UserDAO:
     def __init__(self):
-        super(UserDAO, self).__init__()
         self._create = Event()
         self._remove = Event()
         
@@ -53,15 +51,15 @@ def main():
     button = Button()
     button.click += print_click
     button.click.emit(50, 20)
-    # Remove the global click function handler
     button.click -= print_click
     button.click.emit(510, 20)
     
     label = Label()
-    label += print_label
-    label.emit("Hola mundo")
-    label -= print_label
-    label.emit("Adios mundo")
+    label.text_changed += print_label
+    label.text_changed.emit("Hola mundo")
+    label.text_changed.emit("Adios mundo")
+    label.text_changed -= print_label
+    label.text_changed.emit("No se imprimira")
     
     user = User("John", 30, "john@example.com")
     user_dao = UserDAO()
