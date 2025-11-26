@@ -28,9 +28,9 @@ class Label(Event):
         super(Label, self).__init__()
         self += print_label
 
-class CreateUser(Event):
+class UserDAO(Event):
     def __init__(self):
-        super(CreateUser, self).__init__()
+        super(UserDAO, self).__init__()
         self._create = Event()
         self._remove = Event()
         
@@ -64,9 +64,9 @@ def main():
     label.emit("Adios mundo")
     
     user = User("John", 30, "john@example.com")
-    create_user = CreateUser()
-    create_user.add(user)
-    create_user.remove(user)
+    user_dao = UserDAO()
+    user_dao.add(user)
+    user_dao.remove(user)
 
 
 if __name__ == "__main__":
