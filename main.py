@@ -14,9 +14,6 @@ class Button:
     def click(self, x, y):
         self.clicked.emit(x, y)
 
-    def __del__(self):
-        self.clicked -= print_click
-
 class Label(Event):
     def __init__(self):
         self.text_changed = Event()
@@ -24,9 +21,6 @@ class Label(Event):
     def set_text(self, text):
         self.text = text
         self.text_changed.emit(self.text)
-
-    def __del__(self):
-        self.text_changed -= print_label
         
 
 class UserDAO:
@@ -43,9 +37,12 @@ class UserDAO:
         self.user_deleted.emit(user)
 
     def __del__(self):
-        self.user_created -= print_user_created
-        self.user_deleted -= print_user_deleted
+        for event in self.__dict__.values():
+            for handler in list(event.handlers):
+                event -= handler
 
+        
+       
 
 def print_click(x, y):
     print("Button clicked at", x, y)
@@ -55,6 +52,9 @@ def print_label(text):
 
 def user_created(user):
     print("User created:", user)
+
+def finally_user_created(user):
+    print("Finally user created:", user)
 
 def user_deleted(user):
     print("User deleted:", user)
@@ -77,13 +77,12 @@ def main():
     user = User("John", 30, "john@example.com")
     user_dao = UserDAO()
     user_dao.user_created += user_created
+    user_dao.user_created += finally_user_created
     user_dao.user_deleted += user_deleted
     user_dao.add(user)
     user_dao.remove(user)
     del user_dao
-    del user
-    del button
-    del label
+    
 
 if __name__ == "__main__":
     main()

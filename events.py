@@ -46,3 +46,6 @@ class Event(IEvent):
     def emit(self, *args, **kwargs):
         for handler in self._handlers.values():
             handler.handle(*args, **kwargs)
+    @property
+    def handlers(self):
+        return self._handlers
