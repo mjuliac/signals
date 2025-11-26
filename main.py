@@ -53,10 +53,10 @@ def print_click(x, y):
 def print_label(text):
     print("Label printed:", text)
 
-def print_user_created(user):
+def user_created(user):
     print("User created:", user)
 
-def print_user_deleted(user):
+def user_deleted(user):
     print("User deleted:", user)
 
 
@@ -76,8 +76,8 @@ def main():
     
     user = User("John", 30, "john@example.com")
     user_dao = UserDAO()
-    user_dao.user_created += print_user_created
-    user_dao.user_deleted += print_user_deleted
+    user_dao.user_created += user_created
+    user_dao.user_deleted += user_deleted
     user_dao.add(user)
     user_dao.remove(user)
     del user_dao
